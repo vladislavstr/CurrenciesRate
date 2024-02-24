@@ -1,6 +1,6 @@
-﻿namespace CurrenciesRateBll.Models
+﻿namespace CurrenciesRateApi.Models
 {
-    public class Currency
+    public class CurrencyResponseDto
     {
         public string Id { get; set; }
         public string CbrID { get; set; }
@@ -10,6 +10,5 @@
         public string Name { get; set; }
         public string Value { get; set; }
         public string Previous { get; set; }
-
     }
 }

@@ -3,7 +3,7 @@ namespace UsersGroupBll
 {
     public class Currency : ICurrencyService
     {
-        public Task<IEnumerable<CurrenciesRateDal.Models.Currency>> GetAllCurrency()
+        public Task<IEnumerable<CurrenciesRateBll.Models.Currency>> GetAllCurrency()
         {
             throw new NotImplementedException();
         }

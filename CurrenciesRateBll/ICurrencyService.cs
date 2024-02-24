@@ -1,9 +1,9 @@
-﻿using CurrenciesRateDal.Models;
+﻿using CurrenciesRateBll.Models;
 
 namespace UsersGroupBll
 {
     public interface ICurrencyService
     {
-        Task<IEnumerable<CurrenciesRateDal.Models.Currency>> GetAllCurrency();
+        Task<IEnumerable<CurrenciesRateBll.Models.Currency>> GetAllCurrency();
     }
 }
