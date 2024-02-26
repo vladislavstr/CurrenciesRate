@@ -22,14 +22,27 @@ namespace UsersGroupApi.Controllers
         [HttpGet(Name = "GET/currencies")]
         public async Task<ActionResult<List<CurrencyResponseDto>>> GetAllCurrencies()
         {
-
-            return Ok();
+            try
+            {
+                return Ok(_currencyService.GetAllCurrencies());
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        [HttpGet("{id:int}", Name = "GET/currency")]
+        [HttpGet("{name:string}", Name = "GET/currency")]
         public async Task<ActionResult<CurrencyResponseDto>> GetCurrencyByName(string name)
         {
-            return Ok();
+            try
+            {
+                return Ok(_currencyService.GetCurrencyByName(name));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
     }

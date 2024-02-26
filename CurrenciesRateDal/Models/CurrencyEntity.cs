@@ -6,20 +6,26 @@ namespace CurrenciesRateDal.Models
     {
         [Key]
         public string Id { get; set; }
+
         [Required]
         public string CbrID { get; set; }
+
         [Required]
         public string NumCode { get; set; }
+
         [Required]
         public string CharCode { get; set; }
+
         [Required]
-        public string Nominal { get; set; }
+        public int Nominal { get; set; }
+
         [Required]
         public string Name { get; set; }
-        [Required]
-        public string Value { get; set; }
-        [Required]
-        public string Previous { get; set; }
 
+        [Required]
+        public double Value { get; set; }
+
+        [Required]
+        public double Previous { get; set; }
     }
 }

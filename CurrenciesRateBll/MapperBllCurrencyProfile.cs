@@ -7,7 +7,7 @@ namespace UsersGroupBll
     {
         public MapperBllCurrencyProfile()
         {
-            CreateMap<CurrencyEntity, Currency>();
+            CreateMap<CurrencyEntity, CurrencyService>();
         }
     }
 }

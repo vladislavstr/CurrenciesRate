@@ -4,6 +4,8 @@ namespace UsersGroupBll
 {
     public interface ICurrencyService
     {
-        Task<IEnumerable<CurrenciesRateBll.Models.Currency>> GetAllCurrency();
+        Task<List<Currency>> GetAllCurrencies();
+        Task<Currency> GetCurrencyByName(string name);
+        Task<List<Currency>> LoadDataOfCurrencies();
     }
 }

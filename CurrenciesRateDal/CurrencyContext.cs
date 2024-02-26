@@ -3,14 +3,22 @@ using Microsoft.EntityFrameworkCore;
 
 namespace CurrenciesRateDal
 {
-    internal class CurrencyContext : DbContext
+    public class CurrencyContext : DbContext
     {
+        /// <summary>
+        /// delete before production!
+        /// </summary>
+        public CurrencyContext()
+        {
+            //Database.EnsureDeleted();
+            Database.EnsureCreated();
+        }
+
         public DbSet<CurrencyEntity> Currency { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //optionsBuilder.UseNpgsql(Environment.GetEnvironmentVariable("CurrencyDbConnect"));
-            optionsBuilder.UseInMemoryDatabase("CurrencyDb");
+            optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("CurrencyDbConnect"));
         }
     }
 }
