@@ -19,14 +19,32 @@ namespace UsersGroupApi.Controllers
         }
 
         [HttpGet("currencies", Name = "GET/currencies")]
-        public async Task<ActionResult<List<CurrencyResponseDto>>> GetAllCurrencies()
+        public async Task<ActionResult<List<CurrencyResponseDto>>> GetAllCurrencies(int page = 1, int pageSize = 10)
         {
             try
             {
-                var currenciesResponse = await _currencyService.GetAllCurrenciesAsync();
-                var currenciesResponseDto = _mapper.Map<List<CurrencyResponseDto>>(currenciesResponse);
+                if (page < 1 || pageSize < 1)
+                {
+                    return BadRequest("Invalid page or pageSize values");
+                }
 
-                return Ok(currenciesResponseDto);
+                var currenciesResponse = await _currencyService.GetAllCurrenciesAsync();
+                var currenciesResponseDtoList = _mapper.Map<List<CurrencyResponseDto>>(currenciesResponse);
+
+                int currenciesResponseDtoCount = currenciesResponseDtoList.Count;
+                int currenciesResponseDtoTotalPages = (int)Math.Ceiling((decimal)currenciesResponseDtoCount / pageSize);
+
+                if (page > currenciesResponseDtoTotalPages)
+                {
+                    return NotFound("Requested page not found");
+                }
+
+                var currenciesResponseDtoPerPage = currenciesResponseDtoList
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                return Ok(currenciesResponseDtoPerPage);
             }
             catch (Exception ex)
             {
