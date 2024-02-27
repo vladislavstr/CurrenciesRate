@@ -5,7 +5,7 @@ namespace CurrenciesRateDal.Models
     public class CurrencyEntity
     {
         [Key]
-        public string Id { get; set; }
+        public int Id { get; set; }
 
         [Required]
         public string CbrID { get; set; }

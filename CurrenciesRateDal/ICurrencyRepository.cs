@@ -4,10 +4,10 @@ namespace CurrenciesRateDal
 {
     public interface ICurrencyRepository
     {
-        Task<List<CurrencyEntity>> GetAllCurrencies();
-        Task<CurrencyEntity> GetCurrencyByName(string currencyName);
-        Task<CurrencyEntity> UpdateCurrency(CurrencyEntity currency);
-        Task<CurrencyEntity> AddCurrency(CurrencyEntity currency);
-        Task<bool> CheckCurrencyByName(string currencyName);
+        Task<List<CurrencyEntity>> GetAllCurrenciesAsync();
+        Task<CurrencyEntity> GetCurrencyByNameAsync(string currencyName);
+        Task<CurrencyEntity> UpdateCurrencyAsync(CurrencyEntity currency);
+        Task<CurrencyEntity> AddCurrencyAsync(CurrencyEntity currency);
+        Task<bool> CheckCurrencyByNameAsync(string currencyName);
     }
 }

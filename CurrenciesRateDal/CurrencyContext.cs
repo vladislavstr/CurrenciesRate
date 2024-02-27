@@ -5,12 +5,8 @@ namespace CurrenciesRateDal
 {
     public class CurrencyContext : DbContext
     {
-        /// <summary>
-        /// delete before production!
-        /// </summary>
         public CurrencyContext()
         {
-            //Database.EnsureDeleted();
             Database.EnsureCreated();
         }
 
