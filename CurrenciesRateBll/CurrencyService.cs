@@ -45,6 +45,9 @@ namespace UsersGroupBll
                     var httpResponse = await httpClient.GetAsync(_url);
                     string jsonResponse = await httpResponse.Content.ReadAsStringAsync();
 
+                    httpResponse.EnsureSuccessStatusCode();
+                    await SavedDataOfCurrenciesAsync(jsonResponse);
+
                     var post = JsonConvert.DeserializeObject<Root>(jsonResponse);
 
                     foreach (var value in post.Valute)
@@ -63,11 +66,34 @@ namespace UsersGroupBll
                         }
                     }
                 }
-                catch (Exception e)
+                catch (HttpRequestException e)
                 {
                     throw new Exception(_url, e);
                 }
+                catch (Exception e)
+                {
+                    throw new Exception(e.Message);
+                }
             }
+        }
+
+        private async Task SavedDataOfCurrenciesAsync(string httpResponse)
+        {
+            DateTime currentDate = DateTime.Now;
+            string formattedDateTime = currentDate.ToString("yyyy-MM-dd_HH-mm-ss");
+
+            string fileName = $"json_data_{formattedDateTime}.json";
+
+            string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+            string dataFolderPath = Path.Combine(projectPath, "Data");
+
+            if (!Directory.Exists(dataFolderPath))
+            {
+                Directory.CreateDirectory(dataFolderPath);
+            }
+
+            string filePath = Path.Combine(dataFolderPath, fileName);
+            await File.WriteAllTextAsync(filePath, httpResponse);
         }
     }
 }
