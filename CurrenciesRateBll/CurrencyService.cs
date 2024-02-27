@@ -2,6 +2,7 @@
 using AutoMapper;
 using CurrenciesRateBll.Models;
 using CurrenciesRateDal;
+using CurrenciesRateDal.Models;
 using Newtonsoft.Json;
 
 namespace UsersGroupBll
@@ -13,23 +14,29 @@ namespace UsersGroupBll
 
         private readonly string _url = "https://www.cbr-xml-daily.ru/daily_json.js";
 
-        public CurrencyService (IMapper mapper, ICurrencyRepository currencyRepository)
+        public CurrencyService(IMapper mapper, ICurrencyRepository currencyRepository)
         {
             _mapper = mapper;
             _currencyRepository = currencyRepository;
         }
 
-        public Task<List<Currency>> GetAllCurrencies()
+        public async Task<List<Currency>> GetAllCurrenciesAsync()
         {
-            throw new NotImplementedException();
+            var currenciesEntitys = await _currencyRepository.GetAllCurrenciesAsync();
+            var currenciesResponse = _mapper.Map<List<Currency>>(currenciesEntitys);
+
+            return currenciesResponse;
         }
 
-        public Task<Currency> GetCurrencyByName(string name)
+        public async Task<Currency> GetCurrencyByNameAsync(string name)
         {
-            throw new NotImplementedException();
+            var currencyEntitys = await _currencyRepository.GetCurrencyByNameAsync(name);
+            var currencyResponse = _mapper.Map<Currency>(currencyEntitys);
+
+            return currencyResponse;
         }
 
-        public async Task<List<Currency>> LoadDataOfCurrencies()
+        public async Task LoadDataOfCurrenciesAsync()
         {
             using (HttpClient httpClient = new HttpClient())
             {
@@ -40,7 +47,21 @@ namespace UsersGroupBll
 
                     var post = JsonConvert.DeserializeObject<Root>(jsonResponse);
 
-                    throw new NotImplementedException();
+                    foreach (var value in post.Valute)
+                    {
+                        CurrencyEntity valueResponse = _mapper.Map<CurrencyEntity>(value.Value);
+
+                        string name = valueResponse.Name;
+
+                        if (await _currencyRepository.CheckCurrencyByNameAsync(name))
+                        {
+                            await _currencyRepository.UpdateCurrencyAsync(valueResponse);
+                        }
+                        else
+                        {
+                            await _currencyRepository.AddCurrencyAsync(valueResponse);
+                        }
+                    }
                 }
                 catch (Exception e)
                 {

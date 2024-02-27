@@ -4,8 +4,8 @@ namespace UsersGroupBll
 {
     public interface ICurrencyService
     {
-        Task<List<Currency>> GetAllCurrencies();
-        Task<Currency> GetCurrencyByName(string name);
-        Task<List<Currency>> LoadDataOfCurrencies();
+        Task<List<Currency>> GetAllCurrenciesAsync();
+        Task<Currency> GetCurrencyByNameAsync(string name);
+        Task LoadDataOfCurrenciesAsync();
     }
 }

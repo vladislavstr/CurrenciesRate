@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using CurrenciesRateBll.Models;
 using CurrenciesRateDal.Models;
 
 namespace UsersGroupBll
@@ -7,7 +8,7 @@ namespace UsersGroupBll
     {
         public MapperBllCurrencyProfile()
         {
-            CreateMap<CurrencyEntity, CurrencyService>();
+            CreateMap<CurrencyEntity, Currency>().ReverseMap();
         }
     }
 }
