@@ -3,6 +3,7 @@ using AutoMapper;
 using CurrenciesRateBll.Models;
 using CurrenciesRateDal;
 using CurrenciesRateDal.Models;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 namespace UsersGroupBll
@@ -11,13 +12,13 @@ namespace UsersGroupBll
     {
         private readonly IMapper _mapper;
         private readonly ICurrencyRepository _currencyRepository;
+        private readonly IConfiguration _configuration;
 
-        private readonly string _url = "https://www.cbr-xml-daily.ru/daily_json.js";
-
-        public CurrencyService(IMapper mapper, ICurrencyRepository currencyRepository)
+        public CurrencyService(IMapper mapper, ICurrencyRepository currencyRepository, IConfiguration configuration)
         {
             _mapper = mapper;
             _currencyRepository = currencyRepository;
+            _configuration = configuration;
         }
 
         public async Task<List<Currency>> GetAllCurrenciesAsync()
@@ -40,6 +41,9 @@ namespace UsersGroupBll
         {
             using (HttpClient httpClient = new HttpClient())
             {
+
+            string _url = _configuration.GetSection("CurrenciesServiceSettings:ApiUrl").Value;
+
                 try
                 {
                     var httpResponse = await httpClient.GetAsync(_url);
@@ -79,21 +83,28 @@ namespace UsersGroupBll
 
         private async Task SavedDataOfCurrenciesAsync(string httpResponse)
         {
-            DateTime currentDate = DateTime.Now;
-            string formattedDateTime = currentDate.ToString("yyyy-MM-dd_HH-mm-ss");
-
-            string fileName = $"json_data_{formattedDateTime}.json";
-
-            string projectPath = AppDomain.CurrentDomain.BaseDirectory;
-            string dataFolderPath = Path.Combine(projectPath, "Data");
-
-            if (!Directory.Exists(dataFolderPath))
+            try
             {
-                Directory.CreateDirectory(dataFolderPath);
-            }
+                DateTime currentDate = DateTime.Now;
+                string formattedDateTime = currentDate.ToString("yyyy-MM-dd_HH-mm-ss");
 
-            string filePath = Path.Combine(dataFolderPath, fileName);
-            await File.WriteAllTextAsync(filePath, httpResponse);
+                string fileName = $"json_data_{formattedDateTime}.json";
+
+                string projectPath = AppDomain.CurrentDomain.BaseDirectory;
+                string dataFolderPath = Path.Combine(projectPath, "Data");
+
+                if (!Directory.Exists(dataFolderPath))
+                {
+                    Directory.CreateDirectory(dataFolderPath);
+                }
+
+                string filePath = Path.Combine(dataFolderPath, fileName);
+                await File.WriteAllTextAsync(filePath, httpResponse);
+            }
+            catch (Exception e)
+            {
+                throw new Exception(e.Message);
+            }
         }
     }
 }
