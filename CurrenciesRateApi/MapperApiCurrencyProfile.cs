@@ -1,4 +1,6 @@
 ﻿using AutoMapper;
+using CurrenciesRateApi.Models;
+using CurrenciesRateBll.Models;
 
 namespace UsersGroupApi
 {
@@ -6,6 +8,7 @@ namespace UsersGroupApi
     {
         public MapperApiCurrencyProfile()
         {
+            CreateMap<Currency, CurrencyResponseDto>();
         }
     }
 }

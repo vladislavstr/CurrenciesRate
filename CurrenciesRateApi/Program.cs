@@ -38,6 +38,6 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.UseHangfireDashboard("/hangfire");
-RecurringJob.AddOrUpdate<ICurrencyService>(x => x.LoadDataOfCurrencies(), "35 11 * * *");
+RecurringJob.AddOrUpdate<ICurrencyService>(x => x.LoadDataOfCurrenciesAsync(), "35 11 * * *");
 
 app.Run();

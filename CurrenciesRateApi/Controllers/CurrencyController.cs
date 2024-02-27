@@ -14,17 +14,19 @@ namespace UsersGroupApi.Controllers
 
         public CurrencyController(ICurrencyService currencyService, IMapper mapper)
         {
-
             _mapper = mapper;
             _currencyService = currencyService;
         }
 
-        [HttpGet(Name = "GET/currencies")]
+        [HttpGet("currencies", Name = "GET/currencies")]
         public async Task<ActionResult<List<CurrencyResponseDto>>> GetAllCurrencies()
         {
             try
             {
-                return Ok(_currencyService.GetAllCurrencies());
+                var currenciesResponse = await _currencyService.GetAllCurrenciesAsync();
+                var currenciesResponseDto = _mapper.Map<List<CurrencyResponseDto>>(currenciesResponse);
+
+                return Ok(currenciesResponseDto);
             }
             catch (Exception ex)
             {
@@ -32,18 +34,20 @@ namespace UsersGroupApi.Controllers
             }
         }
 
-        [HttpGet("{name:string}", Name = "GET/currency")]
+        [HttpGet("currency/{name}", Name = "GET/currency/")]
         public async Task<ActionResult<CurrencyResponseDto>> GetCurrencyByName(string name)
         {
             try
             {
-                return Ok(_currencyService.GetCurrencyByName(name));
+                var currencyResponse = await _currencyService.GetCurrencyByNameAsync(name);
+                var currencyResponseDto = _mapper.Map<CurrencyResponseDto>(currencyResponse);
+
+                return Ok(currencyResponseDto);
             }
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
             }
         }
-
     }
 }
